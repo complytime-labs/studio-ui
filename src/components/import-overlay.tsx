@@ -76,30 +76,50 @@ export function ImportOverlay({ open, onClose, expectedArtifactType, onSuccess }
   const contentTypeForFile = (name: string): string =>
     name.toLowerCase().endsWith(".json") ? "application/json" : "text/yaml";
 
+  const pollJob = async (jobId: string, maxAttempts = 20): Promise<Record<string, string>> => {
+    for (let i = 0; i < maxAttempts; i++) {
+      await new Promise((r) => setTimeout(r, 500));
+      const res = await apiFetch(`/api/ingest/jobs/${jobId}`);
+      if (!res.ok) throw new Error(`Poll failed (${res.status})`);
+      const j = await res.json() as Record<string, string>;
+      if (j.status === "completed" || j.status === "failed") return j;
+    }
+    return { status: "pending", job_id: jobId };
+  };
+
   const doImport = async () => {
     if (!rawText?.trim()) return;
     setSubmitting(true);
     setResult(null);
     try {
-      const res = await apiFetch("/api/import", {
+      const res = await apiFetch("/api/ingest", {
         method: "POST",
         headers: { "Content-Type": contentTypeForFile(fileName || "") },
         body: rawText,
       });
-      const txt = await res.text();
+      const accepted = await res.json() as Record<string, string>;
       if (!res.ok) {
-        setResult({ ok: false, message: txt || `Import failed (${res.status})` });
+        const errMsg = accepted.error || accepted.errors || `Import failed (${res.status})`;
+        setResult({ ok: false, message: String(errMsg) });
+        return;
+      }
+      const jobId = accepted.job_id;
+      if (!jobId) {
+        setResult({ ok: false, message: "No job ID returned" });
+        return;
+      }
+      const job = await pollJob(jobId);
+      if (job.status === "failed") {
+        setResult({ ok: false, message: job.error || "Ingest failed" });
         return;
       }
       let msg = "Import succeeded.";
-      try {
-        const j = JSON.parse(txt) as Record<string, string>;
-        if (j.policy_id) msg = `Imported policy ${j.policy_id}.`;
-        else if (j.catalog_id) msg = `Imported ${j.catalog_type || "catalog"} ${j.catalog_id}.`;
-        else if (j.mapping_id) msg = `Imported mapping ${j.mapping_id}.`;
-        else if (j.status) msg = j.status;
-      } catch {
-        if (txt) msg = txt;
+      if (job.artifact_type && job.artifact_id) {
+        msg = `Imported ${job.artifact_type} ${job.artifact_id}.`;
+      } else if (job.policy_id) {
+        msg = `Ingested ${job.inserted || "?"} evidence rows.`;
+      } else if (job.status === "pending") {
+        msg = `Ingest queued (job ${jobId}). Check back shortly.`;
       }
       setResult({ ok: true, message: msg });
       onSuccess?.();
