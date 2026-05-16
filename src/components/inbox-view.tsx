@@ -44,7 +44,7 @@ export function InboxView() {
     setLoading(true);
     Promise.all([
       apiFetch("/api/draft-audit-logs?status=pending_review").then((r) => r.json()).catch(() => []),
-      apiFetch("/api/notifications").then((r) => r.json()).catch(() => []),
+      apiFetch("/workbench/notifications").then((r) => r.json()).catch(() => []),
     ]).then(([d, n]) => {
       setDrafts(d);
       setNotifications(n.filter((notif: Notification) => !notif.read));
@@ -69,7 +69,7 @@ export function InboxView() {
 
   const markRead = (notifId: string) => {
     apiFetch(
-      `/api/notifications/${encodeURIComponent(notifId)}/read`,
+      `/workbench/notifications/${encodeURIComponent(notifId)}/read`,
       { method: "PATCH" },
     ).catch(() => {});
     setNotifications((prev) =>
@@ -82,7 +82,7 @@ export function InboxView() {
 
   const dismissNotification = (notifId: string) => {
     apiFetch(
-      `/api/notifications/${encodeURIComponent(notifId)}/read`,
+      `/workbench/notifications/${encodeURIComponent(notifId)}/read`,
       { method: "PATCH" },
     ).catch(() => {});
     setNotifications((prev) =>

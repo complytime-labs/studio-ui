@@ -46,7 +46,7 @@ export function ProgramsView() {
 
   const loadPrograms = () => {
     setError("");
-    apiFetch("/api/programs")
+    apiFetch("/workbench/programs")
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json();
@@ -111,7 +111,7 @@ export function ProgramsView() {
       if (formCatalogId) {
         body.guidance_catalog_id = formCatalogId;
       }
-      const res = await apiFetch("/api/programs", {
+      const res = await apiFetch("/workbench/programs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

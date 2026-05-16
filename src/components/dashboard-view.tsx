@@ -92,7 +92,7 @@ export function DashboardView() {
   const fetchDashboard = useCallback(() => {
     const failures: string[] = [];
 
-    const programsP = apiFetch("/api/programs")
+    const programsP = apiFetch("/workbench/programs")
       .then((r) => {
         if (!r.ok) return [] as Program[];
         return r.json() as Promise<Program[]>;
@@ -125,21 +125,21 @@ export function DashboardView() {
         return [] as DraftAuditLog[];
       });
 
-    const unreadP = apiFetch("/api/notifications/unread-count")
+    const unreadP = apiFetch("/workbench/notifications/unread-count")
       .then((r) => {
         if (!r.ok) return { count: 0 };
         return r.json() as Promise<{ count: number }>;
       })
       .catch(() => ({ count: 0 }));
 
-    const feedP = apiFetch("/api/notifications?limit=5")
+    const feedP = apiFetch("/workbench/notifications?limit=5")
       .then((r) => {
         if (!r.ok) return [] as Notification[];
         return r.json() as Promise<Notification[]>;
       })
       .catch(() => [] as Notification[]);
 
-    const unreadListP = apiFetch("/api/notifications?unread=true")
+    const unreadListP = apiFetch("/workbench/notifications?unread=true")
       .then((r) => {
         if (!r.ok) return [] as Notification[];
         return r.json() as Promise<Notification[]>;
@@ -178,7 +178,7 @@ export function DashboardView() {
   }, [fetchDashboard, viewInvalidation.value]);
 
   const applyMarkRead = (id: string) => {
-    apiFetch(`/api/notifications/${encodeURIComponent(id)}/read`, {
+    apiFetch(`/workbench/notifications/${encodeURIComponent(id)}/read`, {
       method: "PATCH",
     }).catch(() => {});
     setFeedNotifs((prev) =>

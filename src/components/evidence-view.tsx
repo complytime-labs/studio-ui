@@ -295,7 +295,7 @@ export function EvidenceView({ policyIdOverride, initialTargetFilter, initialCon
   }, []);
 
   useEffect(() => {
-    apiFetch("/api/programs")
+    apiFetch("/workbench/programs")
       .then((r) => r.json())
       .then((data: ProgramListItem[]) =>
         setProgramRows(Array.isArray(data) ? data : []),
@@ -310,7 +310,7 @@ export function EvidenceView({ policyIdOverride, initialTargetFilter, initialCon
       return;
     }
     let cancelled = false;
-    apiFetch(`/api/programs/${encodeURIComponent(pid)}`)
+    apiFetch(`/workbench/programs/${encodeURIComponent(pid)}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((d: ProgramDetailResponse | null) => {
         if (cancelled || !d?.policy_ids) return;

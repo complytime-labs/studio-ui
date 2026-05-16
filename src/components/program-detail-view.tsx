@@ -155,7 +155,7 @@ export function ProgramDetailView() {
       return;
     }
     setError("");
-    apiFetch(`/api/programs/${encodeURIComponent(programId)}`)
+    apiFetch(`/workbench/programs/${encodeURIComponent(programId)}`)
       .then((r) => {
         if (r.status === 404) {
           setProgram(null);
@@ -197,7 +197,7 @@ export function ProgramDetailView() {
     if (!programId) return;
     setRecLoading(true);
     setRecError("");
-    apiFetch(`/api/programs/${encodeURIComponent(programId)}/recommendations`)
+    apiFetch(`/workbench/programs/${encodeURIComponent(programId)}/recommendations`)
       .then((r) => {
         if (r.status === 403) {
           setRecommendations([]);
@@ -284,7 +284,7 @@ export function ProgramDetailView() {
     setActionBusy(`attach:${policyId}`);
     try {
       const res = await apiFetch(
-        `/api/programs/${encodeURIComponent(programId)}/recommendations/${encodeURIComponent(policyId)}/attach`,
+        `/workbench/programs/${encodeURIComponent(programId)}/recommendations/${encodeURIComponent(policyId)}/attach`,
         { method: "POST" },
       );
       if (!res.ok) {
@@ -304,7 +304,7 @@ export function ProgramDetailView() {
     setActionBusy(`dismiss:${policyId}`);
     try {
       const res = await apiFetch(
-        `/api/programs/${encodeURIComponent(programId)}/recommendations/${encodeURIComponent(policyId)}/dismiss`,
+        `/workbench/programs/${encodeURIComponent(programId)}/recommendations/${encodeURIComponent(policyId)}/dismiss`,
         { method: "POST" },
       );
       if (!res.ok) {
@@ -325,7 +325,7 @@ export function ProgramDetailView() {
     setAssignErr("");
     try {
       const nextIds = [...(program.policy_ids || []), assignPick];
-      const res = await apiFetch(`/api/programs/${encodeURIComponent(programId)}`, {
+      const res = await apiFetch(`/workbench/programs/${encodeURIComponent(programId)}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -437,7 +437,6 @@ export function ProgramDetailView() {
           [
             ["overview", "Overview"],
             ["policies", "Policies"],
-            ["recommendations", "Recommendations"],
           ] as const
         ).map(([key, label]) => (
           <button

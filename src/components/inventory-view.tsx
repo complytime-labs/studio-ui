@@ -164,7 +164,7 @@ export function InventoryView({ policyIdOverride }: InventoryViewProps = {}) {
   }, [viewInvalidation.value]);
 
   useEffect(() => {
-    apiFetch("/api/programs")
+    apiFetch("/workbench/programs")
       .then((r) => r.json())
       .then((data: ProgramRow[]) => setPrograms(Array.isArray(data) ? data : []))
       .catch(() => setPrograms([]));
