@@ -379,7 +379,7 @@ export function App() {
         <h1 class="login-title">ComplyTime Studio</h1>
         <p class="login-tagline">Audit Dashboard</p>
         <button class="btn btn-primary login-btn" onClick={redirectToLogin}>
-          Login with Google
+          Sign In
         </button>
       </div>
     );

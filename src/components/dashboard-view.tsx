@@ -94,16 +94,10 @@ export function DashboardView() {
 
     const programsP = apiFetch("/api/programs")
       .then((r) => {
-        if (!r.ok) {
-          failures.push("programs");
-          return [] as Program[];
-        }
+        if (!r.ok) return [] as Program[];
         return r.json() as Promise<Program[]>;
       })
-      .catch(() => {
-        failures.push("programs");
-        return [] as Program[];
-      });
+      .catch(() => [] as Program[]);
 
     const policiesP = apiFetch("/api/policies")
       .then((r) => {
@@ -133,42 +127,24 @@ export function DashboardView() {
 
     const unreadP = apiFetch("/api/notifications/unread-count")
       .then((r) => {
-        if (!r.ok) {
-          failures.push("notifications");
-          return { count: 0 };
-        }
+        if (!r.ok) return { count: 0 };
         return r.json() as Promise<{ count: number }>;
       })
-      .catch(() => {
-        failures.push("notifications");
-        return { count: 0 };
-      });
+      .catch(() => ({ count: 0 }));
 
     const feedP = apiFetch("/api/notifications?limit=5")
       .then((r) => {
-        if (!r.ok) {
-          failures.push("notification feed");
-          return [] as Notification[];
-        }
+        if (!r.ok) return [] as Notification[];
         return r.json() as Promise<Notification[]>;
       })
-      .catch(() => {
-        failures.push("notification feed");
-        return [] as Notification[];
-      });
+      .catch(() => [] as Notification[]);
 
     const unreadListP = apiFetch("/api/notifications?unread=true")
       .then((r) => {
-        if (!r.ok) {
-          failures.push("notifications");
-          return [] as Notification[];
-        }
+        if (!r.ok) return [] as Notification[];
         return r.json() as Promise<Notification[]>;
       })
-      .catch(() => {
-        failures.push("notifications");
-        return [] as Notification[];
-      });
+      .catch(() => [] as Notification[]);
 
     Promise.all([
       programsP,
