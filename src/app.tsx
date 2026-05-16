@@ -77,7 +77,7 @@ function parseHash(hash: string): { view: View; params: Record<string, string> }
   const stripped = hash.replace(/^#\/?/, "");
   const qIdx = stripped.indexOf("?");
   const pathPart = qIdx >= 0 ? stripped.slice(0, qIdx) : stripped;
-  const params: Record<string, string> = {};
+  const params: Record<string, string> = Object.create(null);
   if (qIdx >= 0) {
     new URLSearchParams(stripped.slice(qIdx + 1)).forEach((v, k) => {
       params[k] = v;

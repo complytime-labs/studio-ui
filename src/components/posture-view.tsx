@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { useState, useEffect } from "preact/hooks";
-import { navigate, navigateToPolicy, selectedPolicyId, selectedTimeRange, viewInvalidation } from "../app";
+import { navigate, navigateToPolicy, selectedTimeRange, viewInvalidation } from "../app";
 import { apiFetch } from "../api/fetch";
 import { isStale, freshnessClass, relativeTime } from "../lib/freshness";
 import { cardKeyHandler } from "../lib/a11y";

@@ -397,14 +397,6 @@ export function EvidenceView({ policyIdOverride, initialTargetFilter, initialCon
     });
   }, [recordsWithBuckets, chipState.filters.value, programPolicyIds]);
 
-  const freshnessCounts = useMemo(() => {
-    const counts: Record<FreshnessBucket, number> = {
-      current: 0, aging: 0, stale: 0, "very-stale": 0,
-    };
-    for (const r of recordsWithBuckets) counts[r._bucket]++;
-    return counts;
-  }, [recordsWithBuckets]);
-
   const distinctValues = (field: keyof EvidenceRecord) => () =>
     [...new Set(records.map((r) => r[field]).filter(Boolean) as string[])].sort();
 
