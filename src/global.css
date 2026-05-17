@@ -96,6 +96,7 @@ html, body, #root {
 
 /* ── Header ── */
 .header {
+  position: relative; z-index: 1000;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 24px; height: 56px;
   background: var(--bg-surface); border-bottom: 1px solid var(--border);
@@ -1301,10 +1302,35 @@ tr.freshness-row-very-stale { background-color: var(--freshness-row-very-stale);
   background: rgba(0, 0, 0, 0.4);
 }
 .import-modal {
+  position: relative; z-index: 1101;
   background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
-  padding: 24px; width: 420px; max-width: 90vw; box-shadow: var(--shadow-md);
+  padding: 24px; width: 460px; max-width: 90vw; box-shadow: var(--shadow-md);
 }
 .import-modal h3 { margin: 0 0 16px; font-size: 16px; }
+.import-tabs {
+  display: flex; gap: 0; margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.import-tab {
+  padding: 8px 16px; font-size: 13px; font-weight: 500;
+  background: none; border: none; border-bottom: 2px solid transparent;
+  color: var(--text-muted); cursor: pointer; transition: color 0.15s, border-color 0.15s;
+}
+.import-tab:hover { color: var(--text-primary); }
+.import-tab-active { color: var(--accent); border-bottom-color: var(--accent); }
+.import-paste-area {
+  width: 100%; box-sizing: border-box; padding: 12px; font-family: var(--font-mono, monospace);
+  font-size: 12px; line-height: 1.5; background: var(--bg-input); color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: var(--radius); resize: vertical;
+}
+.import-paste-area:focus { outline: none; border-color: var(--accent); }
+.import-oci-input { display: flex; flex-direction: column; }
+.import-oci-field {
+  width: 100%; box-sizing: border-box; padding: 10px 12px; font-size: 13px;
+  font-family: var(--font-mono, monospace); background: var(--bg-input); color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
+.import-oci-field:focus { outline: none; border-color: var(--accent); }
 .import-dropzone {
   border: 2px dashed var(--border); border-radius: var(--radius); padding: 32px;
   text-align: center; color: var(--text-muted); font-size: 13px; cursor: pointer;

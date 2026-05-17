@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo } from "preact/hooks";
 import { navigateToProgram, currentUser, viewInvalidation, invalidateViews } from "../app";
 import { apiFetch } from "../api/fetch";
 import { cardKeyHandler } from "../lib/a11y";
-import { ImportOverlay } from "./import-overlay";
 
 interface Program {
   id: string;
@@ -39,8 +38,6 @@ export function ProgramsView() {
   const [formDescription, setFormDescription] = useState("");
   const [formError, setFormError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [importGuidanceOpen, setImportGuidanceOpen] = useState(false);
-
   const canWrite =
     currentUser.value?.role === "admin" || currentUser.value?.role === "writer";
 
@@ -141,12 +138,6 @@ export function ProgramsView() {
 
   return (
     <div class="programs-view">
-      <ImportOverlay
-        open={importGuidanceOpen}
-        onClose={() => setImportGuidanceOpen(false)}
-        expectedArtifactType="GuidanceCatalog"
-        onSuccess={invalidateViews}
-      />
       <div class="programs-header">
         <div>
           <h2>Programs</h2>
@@ -169,18 +160,9 @@ export function ProgramsView() {
             <option value="closed">Closed</option>
           </select>
           {canWrite && (
-            <>
-              <button
-                type="button"
-                class="btn btn-secondary"
-                onClick={() => setImportGuidanceOpen(true)}
-              >
-                Import Guidance
-              </button>
-              <button type="button" class="btn btn-primary" onClick={() => setShowCreate((v) => !v)}>
-                {showCreate ? "Cancel" : "New Program"}
-              </button>
-            </>
+            <button type="button" class="btn btn-primary" onClick={() => setShowCreate((v) => !v)}>
+              {showCreate ? "Cancel" : "New Program"}
+            </button>
           )}
         </div>
       </div>

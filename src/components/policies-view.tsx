@@ -3,16 +3,13 @@
 import { useState, useEffect, useMemo } from "preact/hooks";
 import { apiFetch } from "../api/fetch";
 import {
-  currentUser,
   navigateToPolicy,
   selectedProgramFilter,
   updateHash,
   viewInvalidation,
-  invalidateViews,
 } from "../app";
 import { createFilterChips } from "./filter-chip";
 import { AddFilterMenu } from "./add-filter-menu";
-import { ImportOverlay } from "./import-overlay";
 import { fmtDate } from "../lib/format";
 
 interface Policy {
@@ -43,9 +40,7 @@ export function PoliciesView() {
   );
   const [chipState] = useState(() => createFilterChips());
   const [loading, setLoading] = useState(true);
-  const [importOpen, setImportOpen] = useState(false);
-  const canWrite =
-    currentUser.value?.role === "admin" || currentUser.value?.role === "writer";
+  void 0; // unused canWrite guard removed — import lives in header toolbar
 
   const loadPolicies = () => {
     apiFetch("/api/policies")
@@ -123,11 +118,6 @@ export function PoliciesView() {
 
   return (
     <div class="policies-view">
-      <ImportOverlay
-        open={importOpen}
-        onClose={() => setImportOpen(false)}
-        onSuccess={invalidateViews}
-      />
       <div class="policies-header">
         <h2>Policies</h2>
         <div class="policies-filter-row" style={{ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
@@ -152,18 +142,11 @@ export function PoliciesView() {
             </span>
           </div>
         )}
-        {canWrite && (
-          <div class="import-bar">
-            <button type="button" class="btn btn-primary" onClick={() => setImportOpen(true)}>
-              Import artifact
-            </button>
-          </div>
-        )}
       </div>
 
       {policies.length === 0 ? (
         <div class="empty-state">
-          <p>No policies imported. Use Import artifact to upload a Gemara policy YAML or JSON.</p>
+          <p>No policies imported yet. Use the import button in the toolbar to add a Gemara artifact.</p>
         </div>
       ) : visiblePolicies.length === 0 ? (
         <div class="empty-state">
