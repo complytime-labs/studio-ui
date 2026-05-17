@@ -180,7 +180,7 @@ export function ProgramDetailView() {
       apiFetch("/api/policies")
         .then((r) => (r.ok ? r.json() : []))
         .then((rows: PolicyListItem[]) => (Array.isArray(rows) ? rows : [])),
-      apiFetch("/api/posture")
+      apiFetch("/workbench/posture")
         .then((r) => (r.ok ? r.json() : []))
         .then((rows: PostureRow[]) => (Array.isArray(rows) ? rows : [])),
     ]).then(([policies, postureRows]) => {

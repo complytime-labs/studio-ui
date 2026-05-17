@@ -78,7 +78,7 @@ export function RequirementMatrixView({ policyIdOverride, mode = "audit" }: { po
       .catch(() => setRows([]))
       .finally(() => setLoading(false));
 
-    apiFetch(`/api/risks/severity?policy_id=${encodeURIComponent(policyId)}`)
+    apiFetch(`/workbench/risks/severity?policy_id=${encodeURIComponent(policyId)}`)
       .then((r) => r.json())
       .then((rows: { control_id: string; max_severity: string }[]) => {
         const map: Record<string, string> = {};

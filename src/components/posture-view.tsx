@@ -39,7 +39,7 @@ export function PostureView() {
     if (selectedTimeRange.value?.start) params.set("start", selectedTimeRange.value.start);
     if (selectedTimeRange.value?.end) params.set("end", selectedTimeRange.value.end);
     const qs = params.toString();
-    apiFetch(`/api/posture${qs ? `?${qs}` : ""}`)
+    apiFetch(`/workbench/posture${qs ? `?${qs}` : ""}`)
       .then((r) => r.json())
       .then((data: PostureRow[]) => {
         setRows(data);
@@ -51,7 +51,7 @@ export function PostureView() {
 
   const fetchRiskSeverity = (policyIds: string[]) => {
     const promises = policyIds.map((pid) =>
-      apiFetch(`/api/risks/severity?policy_id=${encodeURIComponent(pid)}`)
+      apiFetch(`/workbench/risks/severity?policy_id=${encodeURIComponent(pid)}`)
         .then((r) => r.json())
         .then((rows: { control_id: string; max_severity: string }[]) => {
           const severityOrder = ["Critical", "High", "Medium", "Low", "Informational"];

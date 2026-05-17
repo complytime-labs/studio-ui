@@ -41,8 +41,8 @@ Upstream addresses are injected at runtime via `docker-entrypoint.sh` using `sed
 
 | View | Route | Data Source |
 |:--|:--|:--|
-| Dashboard | `/` | `/api/policies`, `/api/posture` |
-| Posture | `/posture` | `/api/posture`, `/workbench/programs` |
+| Dashboard | `/` | `/api/policies`, `/workbench/posture` |
+| Posture | `/posture` | `/workbench/posture`, `/workbench/programs` |
 | Evidence | `/evidence` | `/api/evidence` |
 | Audit Logs | `/audit-logs` | `/api/audit-logs`, `/api/draft-audit-logs` |
 | Chat | `/chat` | `/workbench/a2a/*` (SSE) |
