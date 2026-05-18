@@ -79,9 +79,16 @@ function parseHash(hash: string): { view: View; params: Record<string, string> }
   const pathPart = qIdx >= 0 ? stripped.slice(0, qIdx) : stripped;
   const params: Record<string, string> = Object.create(null);
   if (qIdx >= 0) {
-    new URLSearchParams(stripped.slice(qIdx + 1)).forEach((v, k) => {
-      params[k] = v;
-    });
+    const allowed = new Set([
+      "policyId", "programId", "auditId", "draftId",
+      "start", "end", "tab", "policy", "program",
+      "control", "req", "target",
+    ]);
+    for (const [k, v] of new URLSearchParams(stripped.slice(qIdx + 1))) {
+      if (allowed.has(k)) {
+        params[k] = v;
+      }
+    }
   }
 
   if (pathPart.startsWith("programs/")) {
